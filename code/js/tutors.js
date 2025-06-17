@@ -26,9 +26,9 @@ function filterTutors() {
             showCard = false;
         }
         
-        // Фільтр по спеціалізації - ВИПРАВЛЕНО
+        // Фільтр по спеціалізації 
         if (subjectFilter && subjectFilter !== '') {
-            // Додаємо пробіли на початок і кінець для точного пошуку
+            
             const subjectsWithSpaces = ' ' + subjects.toLowerCase() + ' ';
             const filterWithSpaces = ' ' + subjectFilter + ' ';
             

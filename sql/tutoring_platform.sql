@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Июн 12 2025 г., 01:00
+-- Время создания: Июн 17 2025 г., 19:12
 -- Версия сервера: 10.4.32-MariaDB
 -- Версия PHP: 8.2.12
 
@@ -26,22 +26,6 @@ USE `tutoring_platform`;
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `lessons`
---
-
-DROP TABLE IF EXISTS `lessons`;
-CREATE TABLE `lessons` (
-  `id` int(11) NOT NULL,
-  `tutor_id` int(11) NOT NULL,
-  `subject` varchar(100) DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `duration` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `lesson_requests`
 --
 
@@ -55,6 +39,14 @@ CREATE TABLE `lesson_requests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- ССЫЛКИ ТАБЛИЦЫ `lesson_requests`:
+--   `student_id`
+--       `users` -> `id`
+--   `tutor_id`
+--       `users` -> `id`
+--
+
+--
 -- Дамп данных таблицы `lesson_requests`
 --
 
@@ -63,7 +55,8 @@ INSERT INTO `lesson_requests` (`id`, `student_id`, `tutor_id`, `created_at`, `st
 (2, 2, 9, '2025-06-11 21:57:19', 'Прийнята'),
 (3, 3, 8, '2025-06-11 22:03:51', 'Прийнята'),
 (4, 3, 9, '2025-06-11 22:03:57', 'Очікує'),
-(5, 3, 18, '2025-06-11 22:04:08', 'Прийнята');
+(5, 3, 18, '2025-06-11 22:04:08', 'Прийнята'),
+(6, 6, 8, '2025-06-15 12:44:17', 'Прийнята');
 
 -- --------------------------------------------------------
 
@@ -82,6 +75,14 @@ CREATE TABLE `messages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- ССЫЛКИ ТАБЛИЦЫ `messages`:
+--   `request_id`
+--       `lesson_requests` -> `id`
+--   `sender_id`
+--       `users` -> `id`
+--
+
+--
 -- Дамп данных таблицы `messages`
 --
 
@@ -90,27 +91,13 @@ INSERT INTO `messages` (`id`, `request_id`, `sender_id`, `message`, `sent_at`, `
 (2, 2, 9, 'Що вас цікавить', '2025-06-11 21:58:10', 1),
 (3, 1, 8, 'Привіт', '2025-06-11 21:59:01', 1),
 (4, 1, 8, 'який предмет?', '2025-06-11 21:59:06', 1),
-(5, 2, 2, 'добрий', '2025-06-11 21:59:54', 0),
-(6, 2, 2, 'біологія', '2025-06-11 21:59:57', 0),
+(5, 2, 2, 'добрий', '2025-06-11 21:59:54', 1),
+(6, 2, 2, 'біологія', '2025-06-11 21:59:57', 1),
 (7, 1, 2, 'привіт', '2025-06-11 22:00:06', 1),
 (8, 1, 2, 'історія цікавить', '2025-06-11 22:00:12', 1),
 (9, 1, 2, 'розкажіть більше', '2025-06-11 22:00:17', 1),
-(10, 1, 8, 'потім', '2025-06-11 22:24:32', 1);
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `orders`
---
-
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
-  `student_id` int(11) NOT NULL,
-  `lesson_id` int(11) NOT NULL,
-  `status` enum('pending','confirmed','done') DEFAULT 'pending',
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(10, 1, 8, 'потім', '2025-06-11 22:24:32', 1),
+(11, 5, 18, 'привіт', '2025-06-13 10:04:04', 0);
 
 -- --------------------------------------------------------
 
@@ -129,6 +116,14 @@ CREATE TABLE `ratings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- ССЫЛКИ ТАБЛИЦЫ `ratings`:
+--   `student_id`
+--       `users` -> `id`
+--   `tutor_id`
+--       `users` -> `id`
+--
+
+--
 -- Дамп данных таблицы `ratings`
 --
 
@@ -136,7 +131,8 @@ INSERT INTO `ratings` (`id`, `student_id`, `tutor_id`, `rating`, `comment`, `cre
 (1, 2, 8, 4, 'супер', '2025-06-12 01:01:31'),
 (2, 2, 9, 3, 'непогано', '2025-06-12 01:02:04'),
 (3, 3, 18, 2, 'норм', '2025-06-12 01:19:43'),
-(4, 3, 8, 5, 'чудово', '2025-06-12 01:21:18');
+(4, 3, 8, 5, 'чудово', '2025-06-12 01:21:18'),
+(5, 6, 8, 4, 'дуже цікаво', '2025-06-15 15:57:03');
 
 -- --------------------------------------------------------
 
@@ -152,6 +148,10 @@ CREATE TABLE `specializations` (
   `icon` varchar(10) DEFAULT '?',
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- ССЫЛКИ ТАБЛИЦЫ `specializations`:
+--
 
 --
 -- Дамп данных таблицы `specializations`
@@ -185,6 +185,14 @@ CREATE TABLE `tutor_specializations` (
   `description` text DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- ССЫЛКИ ТАБЛИЦЫ `tutor_specializations`:
+--   `tutor_id`
+--       `users` -> `id`
+--   `specialization_id`
+--       `specializations` -> `id`
+--
 
 --
 -- Дамп данных таблицы `tutor_specializations`
@@ -223,6 +231,10 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- ССЫЛКИ ТАБЛИЦЫ `users`:
+--
+
+--
 -- Дамп данных таблицы `users`
 --
 
@@ -251,13 +263,6 @@ INSERT INTO `users` (`id`, `name`, `email`, `bio`, `phone`, `password`, `role`, 
 --
 
 --
--- Индексы таблицы `lessons`
---
-ALTER TABLE `lessons`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `tutor_id` (`tutor_id`);
-
---
 -- Индексы таблицы `lesson_requests`
 --
 ALTER TABLE `lesson_requests`
@@ -272,14 +277,6 @@ ALTER TABLE `messages`
   ADD PRIMARY KEY (`id`),
   ADD KEY `request_id` (`request_id`),
   ADD KEY `sender_id` (`sender_id`);
-
---
--- Индексы таблицы `orders`
---
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `student_id` (`student_id`),
-  ADD KEY `lesson_id` (`lesson_id`);
 
 --
 -- Индексы таблицы `ratings`
@@ -316,34 +313,22 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT для таблицы `lessons`
---
-ALTER TABLE `lessons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT для таблицы `lesson_requests`
 --
 ALTER TABLE `lesson_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT для таблицы `orders`
---
-ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT для таблицы `ratings`
 --
 ALTER TABLE `ratings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `specializations`
@@ -368,12 +353,6 @@ ALTER TABLE `users`
 --
 
 --
--- Ограничения внешнего ключа таблицы `lessons`
---
-ALTER TABLE `lessons`
-  ADD CONSTRAINT `lessons_ibfk_1` FOREIGN KEY (`tutor_id`) REFERENCES `users` (`id`);
-
---
 -- Ограничения внешнего ключа таблицы `lesson_requests`
 --
 ALTER TABLE `lesson_requests`
@@ -386,13 +365,6 @@ ALTER TABLE `lesson_requests`
 ALTER TABLE `messages`
   ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`request_id`) REFERENCES `lesson_requests` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `orders`
---
-ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`lesson_id`) REFERENCES `lessons` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `ratings`
